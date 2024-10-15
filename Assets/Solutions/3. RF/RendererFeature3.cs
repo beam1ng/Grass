@@ -55,12 +55,7 @@ namespace Solutions._3._RF
 
             passData.Initialize(resources.ElevatedQuad);
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
-
-            if (resourceData.isActiveTargetBackBuffer)
-            {
-                return;
-            }
-
+            
             passData.GrassMatricesTRS.Clear();
 
             foreach (GrassRenderer renderer in GrassRenderer.AllGrassRenderers)
@@ -68,7 +63,7 @@ namespace Solutions._3._RF
                 Matrix4x4[] matrices = renderer.GetGrassPositions().AsPositionMatricesArray();
                 passData.GrassMatricesTRS.Add(renderer, matrices);
             }
-
+            
             builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
@@ -77,12 +72,7 @@ namespace Solutions._3._RF
                 foreach (GrassRenderer renderer in GrassRenderer.AllGrassRenderers)
                 {
                     Matrix4x4[] matrices = data.GrassMatricesTRS[renderer];
-
-                    if (data.ElevatedQuad == null)
-                    {
-                        return;
-                    }
-
+                    
                     context.cmd.DrawMeshInstanced(
                         data.ElevatedQuad,
                         0,
