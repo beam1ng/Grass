@@ -65,4 +65,4 @@ MonoBehaviour:
   m_Name: RendererFeature3
   m_EditorClassIdentifier: 
   m_Active: 1
-  elevatedQuad: {fileID: 4300000, guid: 194d37b1d792c734fb6c884f5fe39e3f, type: 2}
+  elevatedQuad: {fileID: 4300000, guid: 0bff8b54294ac46429ef0d1818791351, type: 2}
