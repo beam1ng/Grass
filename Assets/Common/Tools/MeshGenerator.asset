@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5aec6f078014ed3b3c645cf1faf74b2, type: 3}
-  m_Name: New Rf Resources
+  m_Name: MeshGenerator
   m_EditorClassIdentifier: 
   elevatedQuad: {fileID: 4300000, guid: 194d37b1d792c734fb6c884f5fe39e3f, type: 2}

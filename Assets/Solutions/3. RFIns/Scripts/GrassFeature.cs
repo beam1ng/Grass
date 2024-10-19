@@ -1,22 +1,23 @@
 using System.Collections.Generic;
 using Common;
+using Solutions._3._RF;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
-namespace Solutions._3._RF
+namespace Solutions._3._RFIns.Scripts
 {
     public class RendererFeature3 : ScriptableRendererFeature
     {
         [SerializeField]
-        private RfResources resources;
+        private Mesh elevatedQuad;
         
         private Pass3 pass3;
 
         public override void Create()
         {
-            pass3 = new Pass3(resources, RenderPassEvent.AfterRenderingOpaques);
+            pass3 = new Pass3(elevatedQuad, RenderPassEvent.AfterRenderingOpaques);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -40,11 +41,11 @@ namespace Solutions._3._RF
 
     public class Pass3 : ScriptableRenderPass
     {
-        private RfResources resources;
+        private readonly Mesh elevatedQuad;
 
-        internal Pass3( RfResources resources, RenderPassEvent passEvent)
+        internal Pass3( Mesh elevatedQuad, RenderPassEvent passEvent)
         {
-            this.resources = resources;
+            this.elevatedQuad = elevatedQuad;
             renderPassEvent = passEvent;
         }
         
@@ -53,7 +54,7 @@ namespace Solutions._3._RF
             using IRasterRenderGraphBuilder builder =
                 renderGraph.AddRasterRenderPass("GrassPass", out PassData passData);
 
-            passData.Initialize(resources.ElevatedQuad);
+            passData.Initialize(elevatedQuad);
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
             
             passData.GrassMatricesTRS.Clear();
