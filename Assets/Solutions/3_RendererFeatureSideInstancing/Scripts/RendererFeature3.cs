@@ -1,28 +1,29 @@
 using System.Collections.Generic;
 using Common;
+using Common.Scripts;
 using Solutions._3._RF;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
-namespace Solutions._3._RFIns.Scripts
+namespace Solutions._3_RendererFeatureSideInstancing.Scripts
 {
     public class RendererFeature3 : ScriptableRendererFeature
     {
         [SerializeField]
         private Mesh elevatedQuad;
         
-        private Pass3 pass3;
+        private GrassPass grassPass;
 
         public override void Create()
         {
-            pass3 = new Pass3(elevatedQuad, RenderPassEvent.AfterRenderingOpaques);
+            grassPass = new GrassPass(elevatedQuad, RenderPassEvent.AfterRenderingOpaques);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            renderer.EnqueuePass(pass3);
+            renderer.EnqueuePass(grassPass);
         }
     }
 
@@ -39,11 +40,11 @@ namespace Solutions._3._RFIns.Scripts
         }
     }
 
-    public class Pass3 : ScriptableRenderPass
+    public class GrassPass : ScriptableRenderPass
     {
         private readonly Mesh elevatedQuad;
 
-        internal Pass3( Mesh elevatedQuad, RenderPassEvent passEvent)
+        internal GrassPass( Mesh elevatedQuad, RenderPassEvent passEvent)
         {
             this.elevatedQuad = elevatedQuad;
             renderPassEvent = passEvent;
@@ -66,7 +67,7 @@ namespace Solutions._3._RFIns.Scripts
             }
             
             builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
-            builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
+            builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.ReadWrite);
 
             builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
             {

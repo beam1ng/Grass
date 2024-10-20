@@ -1,4 +1,4 @@
-Shader "CustomSimpleLit"
+Shader "Custom/InstancedLit"
 {
     Properties
     {
