@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
+namespace Optimization_solutions._4_RendererFeatureSideIndirectInstancing.Scripts
 {
     public class RendererTransformBaker : MonoBehaviour
     {

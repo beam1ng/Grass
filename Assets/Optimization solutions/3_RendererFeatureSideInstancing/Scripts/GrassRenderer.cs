@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Common;
 using UnityEngine;
 
-namespace Solutions._3._RF
+namespace Optimization_solutions._3_RendererFeatureSideInstancing.Scripts
 {
     [RequireComponent(typeof(RendererTransformBaker))]
     [ExecuteAlways]

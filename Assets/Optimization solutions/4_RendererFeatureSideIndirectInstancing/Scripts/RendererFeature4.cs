@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
-namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
+namespace Optimization_solutions._4_RendererFeatureSideIndirectInstancing.Scripts
 {
     public class RendererFeature4 : ScriptableRendererFeature
     {

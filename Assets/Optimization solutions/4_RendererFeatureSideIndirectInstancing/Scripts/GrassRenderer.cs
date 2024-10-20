@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
+namespace Optimization_solutions._4_RendererFeatureSideIndirectInstancing.Scripts
 {
     [RequireComponent(typeof(RendererTransformBaker))]
     [ExecuteAlways]

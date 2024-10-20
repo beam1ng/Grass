@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using Common;
 using Common.Scripts;
-using Solutions._3._RF;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
-namespace Solutions._3_RendererFeatureSideInstancing.Scripts
+namespace Optimization_solutions._3_RendererFeatureSideInstancing.Scripts
 {
     public class RendererFeature3 : ScriptableRendererFeature
     {
