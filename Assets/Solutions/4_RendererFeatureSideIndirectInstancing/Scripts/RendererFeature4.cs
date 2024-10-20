@@ -60,8 +60,7 @@ namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
             builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
-            builder.UseBuffer(renderGraph.ImportBuffer(argsBuffer));
-            builder.UseBuffer(renderGraph.ImportBuffer(GrassRenderer.AllGrassRenderers[0].PositionBuffer));
+            builder.UseBuffer(renderGraph.ImportBuffer(argsBuffer)); 
 
             builder.SetRenderFunc((PassData _, RasterGraphContext context) =>
             {

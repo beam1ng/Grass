@@ -73,10 +73,9 @@ Shader "Custom/InstancedIndirectLit"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                
-                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
-                OUT.positionWS = _PositionBuffer[IN.instanceID].positionWs;
-                OUT.positionCS = mul(UNITY_MATRIX_VP, float4(OUT.positionWS,1));
+                OUT.positionWS = IN.positionOS.xyz + _PositionBuffer[IN.instanceID].positionWs;
+                OUT.positionCS = mul(UNITY_MATRIX_VP, float4(OUT.positionWS.xyz,1));
+                OUT.normalWS = float3(0,0,-1);
                 OUT.uv = IN.uv;
                 return OUT;
             }
