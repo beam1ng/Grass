@@ -1,0 +1,4 @@
+Adding code responsible for rotating grass blades by hash function from IN.instanceId improved cpu side load 
+from 6.0ms to 5.0ms. It seems contrary to what's expected, but by rotating the blades, less fragment shaders
+were invoked, greatly reducing the overdraw. I don't know though, why did it improve the CPU performance - does 
+it need to process something? Or is it just waiting for something... Unchanged 2.0ms GPU time doesn't help here...
