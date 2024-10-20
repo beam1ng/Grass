@@ -65,4 +65,4 @@ MonoBehaviour:
   m_Name: RendererFeature4
   m_EditorClassIdentifier: 
   m_Active: 1
-  grassMesh: {fileID: 4300000, guid: 0bff8b54294ac46429ef0d1818791351, type: 2}
+  grassMesh: {fileID: 4300000, guid: 9067d6bfa2c98d74b9a6a33c3b49a27e, type: 2}

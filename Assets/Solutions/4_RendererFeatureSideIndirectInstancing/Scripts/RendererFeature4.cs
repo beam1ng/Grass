@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
@@ -11,8 +10,9 @@ namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
     {
         [SerializeField]
         private Mesh grassMesh;
+
         private GrassPass grassPass;
-        
+
         public override void Create()
         {
             grassPass = new GrassPass(grassMesh, RenderPassEvent.AfterRenderingOpaques);
@@ -47,7 +47,12 @@ namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
             this.elevatedQuad = elevatedQuad;
             this.renderPassEvent = renderPassEvent;
 
-            argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments,5, sizeof(uint));
+            SetupArgsBuffer();
+        }
+
+        private void SetupArgsBuffer()
+        {
+            argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, 5, sizeof(uint));
             uint[] args = new uint[5] { elevatedQuad.GetIndexCount(0), 100000, 0, 0, 0 };
             argsBuffer.SetData(args);
         }
@@ -60,7 +65,7 @@ namespace Solutions._4_RendererFeatureSideIndirectInstancing.Scripts
             builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
-            builder.UseBuffer(renderGraph.ImportBuffer(argsBuffer)); 
+            builder.UseBuffer(renderGraph.ImportBuffer(argsBuffer));
 
             builder.SetRenderFunc((PassData _, RasterGraphContext context) =>
             {

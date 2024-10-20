@@ -9,7 +9,7 @@ public class MeshGenerator : ScriptableObject
         {
             name = "ElevatedQuad"
         };
-        
+
         const string assetPath = "Assets/ElevatedQuad.asset";
         AssetDatabase.CreateAsset(elevatedQuad, assetPath);
         elevatedQuad = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
@@ -43,7 +43,45 @@ public class MeshGenerator : ScriptableObject
         };
 
         elevatedQuad.RecalculateBounds();
-        
+
+        EditorUtility.SetDirty(elevatedQuad);
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
+    }
+
+    private static void CreateLightWeightElevatedQuad()
+    {
+        Mesh elevatedQuad = new()
+        {
+            name = "LightWeightElevatedQuad"
+        };
+
+        const string assetPath = "Assets/LightWeightElevatedQuad.asset";
+        AssetDatabase.CreateAsset(elevatedQuad, assetPath);
+        elevatedQuad = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
+
+        elevatedQuad.Clear();
+
+        elevatedQuad.vertices = new[]
+        {
+            new Vector3(-0.5f, 0.0f, 0), // Bottom-left
+            new Vector3(0.5f, 0.0f, 0), // Bottom-right
+            new Vector3(-0.5f, 1.0f, 0), // Top-left
+            new Vector3(0.5f, 1.0f, 0), // Top-right
+        };
+
+        elevatedQuad.triangles = new[] { 0, 1, 2, 2, 1, 3 }; // Index buffer
+
+        elevatedQuad.uv = new[]
+        {
+            new Vector2(0f, 0f), // Bottom-left
+            new Vector2(1f, 0f), // Bottom-right
+            new Vector2(0f, 1f), // Top-left
+            new Vector2(1f, 1f), // Top-right
+        };
+
+        elevatedQuad.RecalculateBounds();
+
         EditorUtility.SetDirty(elevatedQuad);
         AssetDatabase.Refresh();
         AssetDatabase.SaveAssets();
@@ -61,6 +99,11 @@ public class MeshGenerator : ScriptableObject
             if (GUILayout.Button("Recreate Elevated Quad"))
             {
                 CreateElevatedQuad();
+            }
+
+            if (GUILayout.Button("Create LightWeight Elevated Quad"))
+            {
+                CreateLightWeightElevatedQuad();
             }
         }
     }
