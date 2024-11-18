@@ -1,4 +1,6 @@
+using System;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Pretty_solutions.PrettyGrass.Scripts.Editor
@@ -8,6 +10,9 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
         private static VegetationPainter _window;
 
         private VegetationPainterData data;
+
+        private int concatenatedLayersMask;
+        private bool isPainting;
 
         [MenuItem("Custom/VegetationPainter")]
         private static void CreateMenu()
@@ -19,6 +24,21 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
         private void OnEnable()
         {
             LoadData();
+            SceneView.duringSceneGui += SceneViewUpdate;
+            HandlePaintingEvents();
+        }
+
+        private void OnDisable()
+        {
+            SceneView.duringSceneGui -= SceneViewUpdate;
+        }
+
+        private void SceneViewUpdate(SceneView sceneView)
+        {
+            if (isPainting)
+            {
+                EditorInputManager.HandleInputEvents(sceneView);
+            }
         }
 
         private void OnGUI()
@@ -33,20 +53,64 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
                 return;
             }
 
-            if (GUILayout.Button("S4Y S0M3TH1NG"))
-            {
-                Debug.Log("HEHROW!");
-            }
-
             EditorGUI.BeginChangeCheck();
 
-            // Display LayerMask field and update the data asset if changed
-            data.brushLayerMask = EditorGUILayout.MaskField("Brush layer mask", data.brushLayerMask, UnityEditorInternal.InternalEditorUtility.layers);
+            concatenatedLayersMask = EditorGUILayout.MaskField("Brush layer mask", concatenatedLayersMask, UnityEditorInternal.InternalEditorUtility.layers);
+            data.brushLayerMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(concatenatedLayersMask);
+            bool oldPaintingState = isPainting;
+            isPainting = EditorGUILayout.Toggle("Is Painting",isPainting);
 
             if (EditorGUI.EndChangeCheck())
             {
-                EditorUtility.SetDirty(data); // Mark the asset as dirty to save changes
+                EditorUtility.SetDirty(data);
+                HandlePaintingState(oldPaintingState);
             }
+        }
+
+        private void HandlePaintingState(bool oldPaintingState)
+        {
+            if (isPainting == oldPaintingState)
+            {
+                return;
+            }
+            
+            HandlePaintingEvents();
+        }
+
+        private void HandlePaintingEvents()
+        {
+            if (isPainting)
+            {
+                EditorInputManager.OnMouseClick += Paint;
+            }
+            else
+            {
+                EditorInputManager.OnMouseClick -= Paint;
+            }
+        }
+
+        private void Paint(Vector3 mousePosition)
+        {
+            if (SceneView.lastActiveSceneView == null)
+            {
+                Debug.LogWarning("SceneView not found!");
+                return;
+            }
+            
+            Camera sceneViewCamera = SceneView.lastActiveSceneView.camera;
+
+            if (sceneViewCamera == null)
+            {
+                Debug.LogWarning("SceneView camera not found!");
+                return;
+            }
+            
+            Ray screenToSceneRay = sceneViewCamera.ScreenPointToRay(mousePosition);
+           if (Physics.Raycast(screenToSceneRay, out RaycastHit hit, Mathf.Infinity ,data.brushLayerMask))
+            {
+                Debug.DrawRay(hit.point,hit.normal,Color.red,1.0f);
+            }
+            
         }
 
         private void LoadData()
@@ -66,6 +130,22 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
             data = ScriptableObject.CreateInstance<VegetationPainterData>();
             AssetDatabase.CreateAsset(data, "Assets/VegetationPainterData.asset");
             AssetDatabase.SaveAssets();
+        }
+    }
+
+    public static class EditorInputManager
+    {
+        public static event Action<Vector3> OnMouseClick;
+
+        public static void HandleInputEvents(SceneView sceneView)
+        {
+            Event currentEvent = Event.current;
+            if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
+            {
+                Vector2 mousePositionInvertedY = new Vector2(currentEvent.mousePosition.x,
+                    sceneView.camera.pixelHeight - currentEvent.mousePosition.y);
+                OnMouseClick.Invoke(mousePositionInvertedY);
+            }
         }
     }
 }

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brushLayerMask:
     serializedVersion: 2
-    m_Bits: 62
+    m_Bits: 1024
