@@ -1,16 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PrettyGrass : MonoBehaviour
+namespace Pretty_solutions.PrettyGrass.Scripts
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [ExecuteAlways]
+    [RequireComponent(typeof(Renderer))]
+    public class PrettyGrass : MonoBehaviour
     {
-        
-    }
+        public static readonly Dictionary<PrettyGrass, Renderer> PrettyGrassToRenderers = new();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void OnEnable()
+        {
+            PrettyGrassToRenderers.Add(this, GetComponent<Renderer>());
+        }
+
+        private void OnDisable()
+        {
+            PrettyGrassToRenderers.Remove(this);
+        }
     }
 }

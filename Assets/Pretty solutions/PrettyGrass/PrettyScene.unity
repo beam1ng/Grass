@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 567798900}
   - component: {fileID: 567798899}
   - component: {fileID: 567798902}
+  - component: {fileID: 567798903}
   m_Layer: 10
   m_Name: Terrain
   m_TagString: Untagged
@@ -425,7 +426,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ea42f1353e7fc60499e52aa6af0a8308, type: 2}
-  - {fileID: 2100000, guid: c739e64cad682bd4686ed14085bae701, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -482,6 +482,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf3da43b97bf6f45867cfe0e6244520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!64 &567798903
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567798898}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1474565860}
 --- !u!1 &638767390
 GameObject:
   m_ObjectHideFlags: 0

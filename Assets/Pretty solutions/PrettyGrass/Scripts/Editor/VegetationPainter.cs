@@ -37,7 +37,7 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
         {
             if (isPainting)
             {
-                EditorInputManager.HandleInputEvents(sceneView);
+                EditorInputManager.ListenInputEvents(sceneView);
             }
         }
 
@@ -59,7 +59,9 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
             data.brushLayerMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(concatenatedLayersMask);
             bool oldPaintingState = isPainting;
             isPainting = EditorGUILayout.Toggle("Is Painting",isPainting);
-
+            VegetationPainterData.ShouldRenderGrid =
+                EditorGUILayout.Toggle("Should Render Grid", VegetationPainterData.ShouldRenderGrid);
+            
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(data);
@@ -82,6 +84,7 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
             if (isPainting)
             {
                 EditorInputManager.OnMouseClick += Paint;
+                Selection.activeGameObject = null;
             }
             else
             {
@@ -109,8 +112,13 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
            if (Physics.Raycast(screenToSceneRay, out RaycastHit hit, Mathf.Infinity ,data.brushLayerMask))
             {
                 Debug.DrawRay(hit.point,hit.normal,Color.red,1.0f);
+                Vector2 tileRelativePositionWS = 
+                    new Vector2(hit.point.x,hit.point.z)
+                    - new Vector2(hit.transform.transform.position.x,hit.transform.position.z);
+
+                Debug.Log($"{tileRelativePositionWS.x},{tileRelativePositionWS.y}");
+                data.PaintableGridTree.TryPaint(tileRelativePositionWS);
             }
-            
         }
 
         private void LoadData()
@@ -137,14 +145,21 @@ namespace Pretty_solutions.PrettyGrass.Scripts.Editor
     {
         public static event Action<Vector3> OnMouseClick;
 
-        public static void HandleInputEvents(SceneView sceneView)
+        public static void ListenInputEvents(SceneView sceneView)
         {
             Event currentEvent = Event.current;
+            
+            if (currentEvent.type == EventType.Layout || currentEvent.type == EventType.MouseDown)
+            {
+                HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+            }
+            
             if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
             {
                 Vector2 mousePositionInvertedY = new Vector2(currentEvent.mousePosition.x,
                     sceneView.camera.pixelHeight - currentEvent.mousePosition.y);
-                OnMouseClick.Invoke(mousePositionInvertedY);
+                
+                OnMouseClick?.Invoke(mousePositionInvertedY);
             }
         }
     }
